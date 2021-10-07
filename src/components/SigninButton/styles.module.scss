@@ -1,0 +1,39 @@
+.signInButton {
+  height: 3rem;
+  border-radius: 3rem;
+  background: var(--gray-850);
+  border: 0;
+  padding: 0 1.5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--white);
+  font-weight: bold;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  // aqui apenas o primeiro componente svg vai receber o estilo
+  svg:first-child {
+    margin-right: 1rem;
+  }
+
+  // aqui o svg com o className closeIcon vai receber o estilo
+  svg.closeIcon {
+    margin-left: 1rem;
+  }
+
+
+  // aqui definimos a transicao do efeito de hover e não hover
+  transition: filter 0.2s;
+
+  // aqui toda vez que o usuario passar com o mouse por cima do botão
+  // vai escurecer em 0.8 
+  &:hover {
+    filter: brightness(0.8);
+  }
+}
