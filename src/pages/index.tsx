@@ -1,6 +1,5 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import { FaSortAmountUpAlt } from 'react-icons/fa';
 import { SubscribeButton } from '../components/SubscribeButton';
 import { stripe } from '../services/stripe';
 
@@ -40,6 +39,33 @@ export default function Home({ product }: HomeProps) {
   )
 }
 
+export const getStaticProps: GetStaticProps = async () => {
+  // aqui faz a chamada ao stripe usando a SKD passando o id do produto
+  const price = await stripe.prices.retrieve('price_1JiOW8G1uXqCJysSUtUveYUh', {
+    // aqui fala que quer trazer todos os dados do produto
+    expand: ['product']
+  });
+
+  // aqui monta o objeto para passar como props da pagina
+  const product = {
+    priceId: price.id,
+    amount: new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    }).format((price.unit_amount / 100)),
+  }
+
+  // aqui retorna o props da pagina
+  return {
+    props: {
+      product
+    },
+    // aqui define o tempo para gerar um novo html para a pagina em segundos
+    revalidate: 60 * 60 * 24, // 24 horas
+  }
+}
+
+/*
 // aqui definimos o SSR props da pagina, vai sempre executar no servidor
 // antes de reenderizar para o usuario
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -65,3 +91,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     }
   }
 }
+
+*/
